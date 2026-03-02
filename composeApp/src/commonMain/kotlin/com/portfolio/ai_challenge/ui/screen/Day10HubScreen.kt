@@ -19,48 +19,50 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.portfolio.ai_challenge.navigation.AppScreen
 
 private data class HubCard(
     val title: String,
     val subtitle: String,
     val description: String,
-    val destination: AppScreen,
-)
-
-private val hubCards = listOf(
-    HubCard(
-        title = "Sliding Window",
-        subtitle = "Strategy A",
-        description = "Keep only the last N messages. Older messages are dropped before each API call. Zero overhead, bounded context.",
-        destination = AppScreen.Day10Sliding,
-    ),
-    HubCard(
-        title = "Sticky Facts",
-        subtitle = "Strategy B",
-        description = "Extract key-value facts from every exchange using DeepSeek. Each request sends facts dict + last messages. 2 API calls per message.",
-        destination = AppScreen.Day10Facts,
-    ),
-    HubCard(
-        title = "Branching",
-        subtitle = "Strategy C",
-        description = "Fork the conversation at any checkpoint. Each branch remembers shared history up to the fork, then its own messages.",
-        destination = AppScreen.Day10Branching,
-    ),
-    HubCard(
-        title = "Strategy Comparison",
-        subtitle = "Metrics",
-        description = "Compare all 3 strategies side by side: avg tokens/message, context retention %, and memory overhead score.",
-        destination = AppScreen.Day10Comparison,
-    ),
+    val onClick: () -> Unit,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Day10HubScreen(
     onBack: () -> Unit,
-    onNavigate: (AppScreen) -> Unit,
+    onSlidingClick: () -> Unit,
+    onFactsClick: () -> Unit,
+    onBranchingClick: () -> Unit,
+    onComparisonClick: () -> Unit,
 ) {
+    val hubCards = listOf(
+        HubCard(
+            title = "Sliding Window",
+            subtitle = "Strategy A",
+            description = "Keep only the last N messages. Older messages are dropped before each API call. Zero overhead, bounded context.",
+            onClick = onSlidingClick,
+        ),
+        HubCard(
+            title = "Sticky Facts",
+            subtitle = "Strategy B",
+            description = "Extract key-value facts from every exchange using DeepSeek. Each request sends facts dict + last messages. 2 API calls per message.",
+            onClick = onFactsClick,
+        ),
+        HubCard(
+            title = "Branching",
+            subtitle = "Strategy C",
+            description = "Fork the conversation at any checkpoint. Each branch remembers shared history up to the fork, then its own messages.",
+            onClick = onBranchingClick,
+        ),
+        HubCard(
+            title = "Strategy Comparison",
+            subtitle = "Metrics",
+            description = "Compare all 3 strategies side by side: avg tokens/message, context retention %, and memory overhead score.",
+            onClick = onComparisonClick,
+        ),
+    )
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -82,16 +84,16 @@ fun Day10HubScreen(
         ) {
             items(hubCards.size) { index ->
                 val card = hubCards[index]
-                HubStrategyCard(card = card, onClick = { onNavigate(card.destination) })
+                HubStrategyCard(card = card)
             }
         }
     }
 }
 
 @Composable
-private fun HubStrategyCard(card: HubCard, onClick: () -> Unit) {
+private fun HubStrategyCard(card: HubCard) {
     ElevatedCard(
-        onClick = onClick,
+        onClick = card.onClick,
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.elevatedCardColors(
             containerColor = MaterialTheme.colorScheme.surface,

@@ -46,6 +46,9 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.nav3.runtime)
+            implementation(libs.nav3.ui)
+            implementation(libs.lifecycle.viewmodel.nav3)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
