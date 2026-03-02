@@ -1,6 +1,6 @@
 [versions]
-agp = "8.11.2"
-koin = "4.0.4"
+agp = "9.0.1"
+koin = "4.1.0"
 android-compileSdk = "36"
 android-minSdk = "31"
 android-targetSdk = "36"
@@ -14,9 +14,9 @@ ktor = "3.3.3"
 koog = "0.6.3"
 kotlinx-serialization = "1.8.1"
 mockk = "1.13.13"
-room = "2.7.0"
-sqlite-bundled = "2.5.0"
-ksp = "2.2.0-2.0.2"
+room = "2.8.4"
+sqlite-bundled = "2.6.2"
+ksp = "2.3.6"
 logback = "1.5.24"
 material3 = "1.10.0-alpha05"
 nav3-kmp = "1.0.0-alpha06"
@@ -73,6 +73,7 @@ lifecycle-viewmodel-nav3 = { module = "org.jetbrains.androidx.lifecycle:lifecycl
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
+androidMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

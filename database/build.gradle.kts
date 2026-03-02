@@ -2,20 +2,25 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
 
 kotlin {
-    androidTarget {
+    androidLibrary {
+        namespace = "com.portfolio.ai_challenge.database"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
             freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
+
     jvm {
         compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
             freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
@@ -30,18 +35,6 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.koin.android)
         }
-    }
-}
-
-android {
-    namespace = "com.portfolio.ai_challenge.database"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 
