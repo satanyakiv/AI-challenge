@@ -62,9 +62,9 @@ Three Gradle modules defined in `settings.gradle.kts`:
 
 ## Koog (AI Agents Framework)
 
-- When designing or implementing AI agent features, invoke `/koog` skill first (`.claude/skills/koog.md`)
-  - Covers: architecture decisions, canonical patterns, anti-patterns, testing, MCP/A2A
-- For quick API syntax/imports lookup, use `.claude/koog-reference.md`
+- When designing or implementing AI agent features, invoke `/koog` skill first (`~/.claude/skills/koog.md`)
+  - Covers: architecture decisions, anti-patterns, testing, MCP/A2A
+- For quick API syntax/imports lookup, use `~/.claude/koog-reference.md`
 - Use `ksrc` skill to inspect Koog source code for API details not covered in either reference
 
 ## Workflow
