@@ -6,4 +6,5 @@ data class PsyChatResult(
     val session: PsySessionContext,
     val profile: PsyUserProfile,
     val turnContext: TurnContext,
+    val profileUpdates: List<String> = emptyList(),
 )

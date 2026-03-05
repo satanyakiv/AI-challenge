@@ -19,6 +19,12 @@ object Prompts {
 
     object Psy {
         val SYSTEM by lazy { load("prompts/psy/system.txt") }
+        val PERSONALIZATION_FORMAL by lazy { load("prompts/psy/personalization-formal.txt") }
+        val PERSONALIZATION_INFORMAL by lazy { load("prompts/psy/personalization-informal.txt") }
+        val PERSONALIZATION_MIXED by lazy { load("prompts/psy/personalization-mixed.txt") }
+        val PERSONALIZATION_SHORT by lazy { load("prompts/psy/personalization-short.txt") }
+        val PERSONALIZATION_MEDIUM by lazy { load("prompts/psy/personalization-medium.txt") }
+        val PERSONALIZATION_DETAILED by lazy { load("prompts/psy/personalization-detailed.txt") }
     }
 
     private fun load(path: String): String =

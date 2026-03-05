@@ -1,5 +1,6 @@
 package com.portfolio.ai_challenge
 
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.PersonalizeResponseUseCase
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.ProfileExtractor
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyAgent
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.UpdateProfileUseCase
@@ -25,7 +26,7 @@ class Day11PersistenceTest {
     private val llmClient = mockk<LlmClient>()
     private val agent = PsyAgent(
         contextStore = contextStore,
-        promptBuilder = PsyPromptBuilder(ContextWindowManager()),
+        promptBuilder = PsyPromptBuilder(ContextWindowManager(), PersonalizeResponseUseCase()),
         llmClient = llmClient,
         updateProfile = UpdateProfileUseCase(ProfileExtractor(), contextStore),
     )

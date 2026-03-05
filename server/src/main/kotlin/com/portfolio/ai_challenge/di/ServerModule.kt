@@ -6,8 +6,11 @@ import com.portfolio.ai_challenge.agent.Day10SlidingAgent
 import com.portfolio.ai_challenge.agent.Day6Agent
 import com.portfolio.ai_challenge.agent.Day7Agent
 import com.portfolio.ai_challenge.agent.Day9Agent
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.Day12PsyAgent
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.PersonalizeResponseUseCase
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.ProfileExtractor
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyAgent
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.UpdatePreferencesUseCase
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.UpdateProfileUseCase
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyPromptBuilder
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyResponseMapper
@@ -44,9 +47,12 @@ val serverModule = module {
     // Psy-Agent (Day 11+)
     single<ContextStore> { InMemoryContextStore() } bind ContextStore::class
     single { ContextWindowManager() }
-    single { PsyPromptBuilder(get()) }
+    single { PersonalizeResponseUseCase() }
+    single { PsyPromptBuilder(get(), get()) }
     single { PsyResponseMapper() }
     single { ProfileExtractor() }
     single { UpdateProfileUseCase(get(), get()) }
+    single { UpdatePreferencesUseCase(get()) }
     single { PsyAgent(get(), get(), get(), get()) }
+    single { Day12PsyAgent(get(), get(), get(), get()) }
 }

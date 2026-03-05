@@ -3,6 +3,8 @@ package com.portfolio.ai_challenge.data
 import com.portfolio.ai_challenge.SERVER_PORT
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -32,6 +34,33 @@ data class PsyChatResponse(
     val response: String,
     val state: String,
     val memoryLayers: MemoryLayersDebug,
+    val profileUpdates: List<String> = emptyList(),
+)
+
+@Serializable
+data class CommunicationPreferences(
+    val language: String = "en",
+    val formality: String = "INFORMAL",
+    val responseLength: String = "MEDIUM",
+    val avoidTopics: List<String> = emptyList(),
+)
+
+@Serializable
+data class PsyUserProfileDto(
+    val userId: String,
+    val preferredName: String? = null,
+    val primaryConcerns: List<String> = emptyList(),
+    val knownTriggers: List<String> = emptyList(),
+    val preferences: CommunicationPreferences = CommunicationPreferences(),
+)
+
+@Serializable
+data class PsyPreferencesRequest(
+    val userId: String,
+    val language: String = "en",
+    val formality: String = "INFORMAL",
+    val responseLength: String = "MEDIUM",
+    val avoidTopics: List<String> = emptyList(),
 )
 
 class PsyAgentApi(private val client: HttpClient) {
@@ -43,8 +72,7 @@ class PsyAgentApi(private val client: HttpClient) {
             setBody(PsyStartRequest(userId))
         }
         if (!httpResponse.status.isSuccess()) {
-            val errorBody = httpResponse.bodyAsText()
-            throw Exception("Psy agent error (${httpResponse.status.value}): $errorBody")
+            throw Exception("Psy agent error (${httpResponse.status.value}): ${httpResponse.bodyAsText()}")
         }
         return httpResponse.body<PsyStartResponse>()
     }
@@ -55,9 +83,35 @@ class PsyAgentApi(private val client: HttpClient) {
             setBody(PsyChatRequest(sessionId, message))
         }
         if (!httpResponse.status.isSuccess()) {
-            val errorBody = httpResponse.bodyAsText()
-            throw Exception("Psy agent error (${httpResponse.status.value}): $errorBody")
+            throw Exception("Psy agent error (${httpResponse.status.value}): ${httpResponse.bodyAsText()}")
         }
         return httpResponse.body<PsyChatResponse>()
+    }
+
+    suspend fun getProfile(userId: String): PsyUserProfileDto {
+        val httpResponse = client.get("$baseUrl/api/agent/psy/profile") {
+            parameter("userId", userId)
+        }
+        if (!httpResponse.status.isSuccess()) {
+            throw Exception("Profile error (${httpResponse.status.value}): ${httpResponse.bodyAsText()}")
+        }
+        return httpResponse.body<PsyUserProfileDto>()
+    }
+
+    suspend fun updatePreferences(userId: String, preferences: CommunicationPreferences): PsyUserProfileDto {
+        val httpResponse = client.post("$baseUrl/api/agent/psy/profile/preferences") {
+            contentType(ContentType.Application.Json)
+            setBody(PsyPreferencesRequest(
+                userId = userId,
+                language = preferences.language,
+                formality = preferences.formality,
+                responseLength = preferences.responseLength,
+                avoidTopics = preferences.avoidTopics,
+            ))
+        }
+        if (!httpResponse.status.isSuccess()) {
+            throw Exception("Preferences error (${httpResponse.status.value}): ${httpResponse.bodyAsText()}")
+        }
+        return httpResponse.body<PsyUserProfileDto>()
     }
 }

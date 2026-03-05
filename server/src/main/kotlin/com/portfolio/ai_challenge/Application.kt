@@ -6,8 +6,10 @@ import com.portfolio.ai_challenge.agent.Day10SlidingAgent
 import com.portfolio.ai_challenge.agent.Day6Agent
 import com.portfolio.ai_challenge.agent.Day7Agent
 import com.portfolio.ai_challenge.agent.Day9Agent
-import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyAgent
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.Day12PsyAgent
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyResponseMapper
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.UpdatePreferencesUseCase
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.memory.ContextStore
 import com.portfolio.ai_challenge.di.serverModule
 import com.portfolio.ai_challenge.routes.agentRoutes
 import com.portfolio.ai_challenge.routes.agentV10Routes
@@ -53,6 +55,6 @@ fun Application.module() {
         agentV7Routes(koin.get<Day7Agent>())
         agentV9Routes(koin.get<Day9Agent>())
         agentV10Routes(koin.get<Day10SlidingAgent>(), koin.get<Day10FactsAgent>(), koin.get<Day10BranchingAgent>())
-        psyAgentRoutes(koin.get<PsyAgent>(), koin.get<PsyResponseMapper>())
+        psyAgentRoutes(koin.get<Day12PsyAgent>(), koin.get<PsyResponseMapper>(), koin.get<UpdatePreferencesUseCase>(), koin.get<ContextStore>())
     }
 }

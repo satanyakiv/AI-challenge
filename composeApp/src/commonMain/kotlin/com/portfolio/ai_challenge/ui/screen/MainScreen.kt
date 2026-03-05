@@ -74,6 +74,13 @@ private val challengeDays = listOf(
         description = "3-layer memory for mental health AI: Turn (ephemeral), Session (in-memory), Profile (persistent). MindGuard — compassionate AI assistant.",
         emoji = "\uD83E\uDDE0",
     ),
+    ChallengeDay(
+        id = 12,
+        dayNumber = 12,
+        title = "Personalization",
+        description = "Profile preferences: formality, language, response length, avoid topics. Agent adapts communication style to each user.",
+        emoji = "\uD83C\uDFA8",
+    ),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
