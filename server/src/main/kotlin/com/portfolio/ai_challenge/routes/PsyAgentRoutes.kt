@@ -1,17 +1,25 @@
 package com.portfolio.ai_challenge.routes
 
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyAgent
-import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyChatRequest
-import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyStartRequest
-import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyStartResponse
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyResponseMapper
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
+import kotlinx.serialization.Serializable
 
-fun Route.psyAgentRoutes(psyAgent: PsyAgent) {
+@Serializable
+data class PsyStartRequest(val userId: String)
+
+@Serializable
+data class PsyStartResponse(val sessionId: String)
+
+@Serializable
+data class PsyChatRequest(val sessionId: String, val message: String)
+
+fun Route.psyAgentRoutes(psyAgent: PsyAgent, responseMapper: PsyResponseMapper) {
     route("/api/agent/psy") {
         post("/start") {
             val request = call.receive<PsyStartRequest>()
@@ -31,7 +39,7 @@ fun Route.psyAgentRoutes(psyAgent: PsyAgent) {
             }
             try {
                 val result = psyAgent.chat(request.sessionId, request.message)
-                call.respond(result)
+                call.respond(responseMapper.toChatResponse(result))
             } catch (e: IllegalArgumentException) {
                 call.respond(HttpStatusCode.NotFound, mapOf("error" to (e.message ?: "Session not found")))
             } catch (e: Exception) {

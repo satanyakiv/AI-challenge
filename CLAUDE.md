@@ -28,9 +28,12 @@ Package: `com.portfolio.ai_challenge`
 
 Kotlin 2.3.10, Compose 1.10.2, Ktor 3.4.1, AGP 9.1.0, Room 2.8.4, Koin 4.1.1, kotlinx-serialization 1.10.0, Navigation3 1.0.0-alpha06, Koog 0.6.4, MockK 1.14.9. Full versions: `gradle/libs.versions.toml`.
 
-## Key Rules
+## Key Rules (details in `.claude/rules/`)
 
-Before writing code, read `.claude/rules/architecture.md` — mandatory for ALL server features.
+Read before writing code:
+- `.claude/rules/architecture.md` — layered arch, DI, file organization
+- `.claude/rules/prompts.md` — prompt text in resources, loader/template patterns
+- `.claude/rules/testing.md` — unit + integration, naming, what to test per component
 
 - **Layered arch**: Routes (HTTP) → Agent (orchestration) → Components (logic) → Store (data)
 - **SRP**: every class/function does ONE thing
@@ -38,6 +41,7 @@ Before writing code, read `.claude/rules/architecture.md` — mandatory for ALL 
 - **Types**: sealed interface over strings for states, events, results
 - **Size limits**: files < 150 lines, functions < 20 lines
 - **Models**: one class per file, `@Serializable`, prefix domain models (`PsyUserProfile`)
+- **Prompts**: all prompt text in `server/src/main/resources/prompts/`, never inline in .kt files
 - **Testing**: unit + integration per feature. Naming: `testWhat_condition_expected()`
 - **UI**: English text, follow Day7-Day10 patterns, register in AppScreen/ChallengeDay/MainScreen/App.kt
 

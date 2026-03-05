@@ -1,10 +1,16 @@
 package com.portfolio.ai_challenge
 
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.MemoryLayersDebug
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyAgent
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyChatResponse
-import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyStartResponse
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyResponseMapper
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.memory.ContextWindowManager
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.memory.InMemoryContextStore
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.model.PsyChatResult
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.model.PsySessionContext
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.model.PsyUserProfile
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.model.TurnContext
+import com.portfolio.ai_challenge.routes.PsyStartResponse
 import com.portfolio.ai_challenge.routes.psyAgentRoutes
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -28,6 +34,17 @@ import kotlin.test.assertTrue
 
 class Day11IntegrationTest {
 
+    private fun fakeChatResult(
+        response: String = "I hear you. That sounds difficult.",
+        userId: String = "test1",
+    ): PsyChatResult = PsyChatResult(
+        response = response,
+        state = "active",
+        session = PsySessionContext(sessionId = "sid", userId = userId, messages = emptyList()),
+        profile = PsyUserProfile(userId = userId),
+        turnContext = TurnContext(attemptCount = 1),
+    )
+
     private fun buildPsyAgent(response: String = "I hear you. That sounds difficult."): PsyAgent {
         val mockAgent = mockk<PsyAgent>()
         coEvery { mockAgent.startSession(any()) } answers {
@@ -36,15 +53,7 @@ class Day11IntegrationTest {
             store.createSession(sessionId, firstArg())
             sessionId
         }
-        coEvery { mockAgent.chat(any(), any()) } returns com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyChatResponse(
-            response = response,
-            state = "active",
-            memoryLayers = com.portfolio.ai_challenge.agent.day_11_psy_agent.MemoryLayersDebug(
-                turn = "{ plan: null, attemptCount: 1, detectedEmotion: null }",
-                session = "{ messageCount: 2, detectedEmotions: [] }",
-                profile = "{ userId: test1, preferredName: null, concerns: [] }",
-            ),
-        )
+        coEvery { mockAgent.chat(any(), any()) } returns fakeChatResult(response)
         return mockAgent
     }
 
@@ -55,7 +64,7 @@ class Day11IntegrationTest {
         install(ServerContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
-        routing { psyAgentRoutes(mockAgent) }
+        routing { psyAgentRoutes(mockAgent, PsyResponseMapper()) }
 
         val client = createClient {
             install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
@@ -79,7 +88,7 @@ class Day11IntegrationTest {
         install(ServerContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
-        routing { psyAgentRoutes(mockAgent) }
+        routing { psyAgentRoutes(mockAgent, PsyResponseMapper()) }
 
         val client = createClient {
             install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
@@ -96,7 +105,6 @@ class Day11IntegrationTest {
     @Test
     fun `POST psy chat returns response and memoryLayers`() = testApplication {
         val realStore = InMemoryContextStore()
-        val realManager = ContextWindowManager()
         val mockAgent = mockk<PsyAgent>()
 
         coEvery { mockAgent.startSession("user1") } answers {
@@ -104,20 +112,22 @@ class Day11IntegrationTest {
             realStore.createSession(id, "user1")
             id
         }
-        coEvery { mockAgent.chat("test-session-id", any()) } returns PsyChatResponse(
+        coEvery { mockAgent.chat("test-session-id", any()) } returns PsyChatResult(
             response = "I understand. Let's try Box Breathing together.",
             state = "active",
-            memoryLayers = com.portfolio.ai_challenge.agent.day_11_psy_agent.MemoryLayersDebug(
-                turn = "{ plan: null, attemptCount: 1, detectedEmotion: null }",
-                session = "{ messageCount: 2, detectedEmotions: [] }",
-                profile = "{ userId: user1, preferredName: null, concerns: [] }",
+            session = PsySessionContext(
+                sessionId = "test-session-id",
+                userId = "user1",
+                messages = emptyList(),
             ),
+            profile = PsyUserProfile(userId = "user1"),
+            turnContext = TurnContext(attemptCount = 1),
         )
 
         install(ServerContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
-        routing { psyAgentRoutes(mockAgent) }
+        routing { psyAgentRoutes(mockAgent, PsyResponseMapper()) }
 
         val client = createClient {
             install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
@@ -149,7 +159,7 @@ class Day11IntegrationTest {
         install(ServerContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
-        routing { psyAgentRoutes(mockAgent) }
+        routing { psyAgentRoutes(mockAgent, PsyResponseMapper()) }
 
         val client = createClient {
             install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
