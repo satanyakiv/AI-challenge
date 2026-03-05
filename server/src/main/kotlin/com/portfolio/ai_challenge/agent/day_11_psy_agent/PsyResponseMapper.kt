@@ -18,6 +18,7 @@ data class PsyChatResponse(
     val response: String,
     val state: String,
     val memoryLayers: MemoryLayersDebug,
+    val profileUpdates: List<String> = emptyList(),
 )
 
 class PsyResponseMapper {
@@ -29,12 +30,13 @@ class PsyResponseMapper {
     ): MemoryLayersDebug = MemoryLayersDebug(
         turn = "{ plan: ${turn.plan}, attemptCount: ${turn.attemptCount}, detectedEmotion: ${turn.detectedEmotion} }",
         session = "{ messageCount: ${session.messages.size}, detectedEmotions: ${session.detectedEmotions} }",
-        profile = "{ userId: ${profile.userId}, preferredName: ${profile.preferredName}, concerns: ${profile.primaryConcerns} }",
+        profile = "{ userId: ${profile.userId}, preferredName: ${profile.preferredName}, concerns: ${profile.primaryConcerns}, formality: ${profile.preferences.formality} }",
     )
 
     fun toChatResponse(result: PsyChatResult): PsyChatResponse = PsyChatResponse(
         response = result.response,
         state = result.state,
         memoryLayers = buildMemoryDebug(result.session, result.profile, result.turnContext),
+        profileUpdates = result.profileUpdates,
     )
 }

@@ -1,17 +1,20 @@
 package com.portfolio.ai_challenge.agent.day_11_psy_agent
 
-import com.portfolio.ai_challenge.agent.Prompts
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.memory.ContextWindowManager
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.model.PsyAgentContext
 import com.portfolio.ai_challenge.models.DeepSeekMessage
 import com.portfolio.ai_challenge.models.MessageRole
 
-class PsyPromptBuilder(private val contextWindowManager: ContextWindowManager) {
+class PsyPromptBuilder(
+    private val contextWindowManager: ContextWindowManager,
+    private val personalizeUseCase: PersonalizeResponseUseCase,
+) {
 
     fun buildMessages(context: PsyAgentContext): List<DeepSeekMessage> {
+        val systemPrompt = personalizeUseCase.buildPersonalizedSystemPrompt(context)
         val contextPrompt = contextWindowManager.buildPrompt(context)
         return buildList {
-            add(DeepSeekMessage(role = MessageRole.SYSTEM, content = Prompts.Psy.SYSTEM))
+            add(DeepSeekMessage(role = MessageRole.SYSTEM, content = systemPrompt))
             if (contextPrompt.isNotBlank()) {
                 add(DeepSeekMessage(role = MessageRole.SYSTEM, content = "Context:\n$contextPrompt"))
             }

@@ -1,9 +1,10 @@
 package com.portfolio.ai_challenge
 
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.Day12PsyAgent
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.MemoryLayersDebug
-import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyAgent
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyChatResponse
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.PsyResponseMapper
+import com.portfolio.ai_challenge.agent.day_11_psy_agent.UpdatePreferencesUseCase
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.memory.ContextWindowManager
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.memory.InMemoryContextStore
 import com.portfolio.ai_challenge.agent.day_11_psy_agent.model.PsyChatResult
@@ -45,8 +46,8 @@ class Day11IntegrationTest {
         turnContext = TurnContext(attemptCount = 1),
     )
 
-    private fun buildPsyAgent(response: String = "I hear you. That sounds difficult."): PsyAgent {
-        val mockAgent = mockk<PsyAgent>()
+    private fun buildPsyAgent(response: String = "I hear you. That sounds difficult."): Day12PsyAgent {
+        val mockAgent = mockk<Day12PsyAgent>()
         coEvery { mockAgent.startSession(any()) } answers {
             val store = InMemoryContextStore()
             val sessionId = java.util.UUID.randomUUID().toString()
@@ -64,7 +65,8 @@ class Day11IntegrationTest {
         install(ServerContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
-        routing { psyAgentRoutes(mockAgent, PsyResponseMapper()) }
+        val testStore = InMemoryContextStore()
+        routing { psyAgentRoutes(mockAgent, PsyResponseMapper(), UpdatePreferencesUseCase(testStore), testStore) }
 
         val client = createClient {
             install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
@@ -88,7 +90,8 @@ class Day11IntegrationTest {
         install(ServerContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
-        routing { psyAgentRoutes(mockAgent, PsyResponseMapper()) }
+        val testStore = InMemoryContextStore()
+        routing { psyAgentRoutes(mockAgent, PsyResponseMapper(), UpdatePreferencesUseCase(testStore), testStore) }
 
         val client = createClient {
             install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
@@ -105,7 +108,7 @@ class Day11IntegrationTest {
     @Test
     fun `POST psy chat returns response and memoryLayers`() = testApplication {
         val realStore = InMemoryContextStore()
-        val mockAgent = mockk<PsyAgent>()
+        val mockAgent = mockk<Day12PsyAgent>()
 
         coEvery { mockAgent.startSession("user1") } answers {
             val id = "test-session-id"
@@ -127,7 +130,8 @@ class Day11IntegrationTest {
         install(ServerContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
-        routing { psyAgentRoutes(mockAgent, PsyResponseMapper()) }
+        val testStore = InMemoryContextStore()
+        routing { psyAgentRoutes(mockAgent, PsyResponseMapper(), UpdatePreferencesUseCase(testStore), testStore) }
 
         val client = createClient {
             install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
@@ -159,7 +163,8 @@ class Day11IntegrationTest {
         install(ServerContentNegotiation) {
             json(Json { ignoreUnknownKeys = true })
         }
-        routing { psyAgentRoutes(mockAgent, PsyResponseMapper()) }
+        val testStore = InMemoryContextStore()
+        routing { psyAgentRoutes(mockAgent, PsyResponseMapper(), UpdatePreferencesUseCase(testStore), testStore) }
 
         val client = createClient {
             install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
