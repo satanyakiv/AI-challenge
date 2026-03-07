@@ -8,7 +8,16 @@ import com.portfolio.ai_challenge.agent.Day7Agent
 import com.portfolio.ai_challenge.agent.Day9Agent
 import com.portfolio.ai_challenge.agent.psy_agent.Day12PsyAgent
 import com.portfolio.ai_challenge.agent.psy_agent.Day13PsyAgent
+import com.portfolio.ai_challenge.agent.psy_agent.Day14PsyAgent
 import com.portfolio.ai_challenge.agent.psy_agent.DetectCrisisUseCase
+import com.portfolio.ai_challenge.agent.psy_agent.ValidateAndRetryUseCase
+import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantChecker
+import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantPromptInjector
+import com.portfolio.ai_challenge.agent.psy_agent.invariants.impl.NoDiagnosisInvariant
+import com.portfolio.ai_challenge.agent.psy_agent.invariants.impl.NoMedicationInvariant
+import com.portfolio.ai_challenge.agent.psy_agent.invariants.impl.NoPromptLeakInvariant
+import com.portfolio.ai_challenge.agent.psy_agent.invariants.impl.NoProfanityInvariant
+import com.portfolio.ai_challenge.agent.psy_agent.invariants.impl.ResponseLengthInvariant
 import com.portfolio.ai_challenge.agent.psy_agent.SessionStateToIntentMapper
 import com.portfolio.ai_challenge.agent.psy_agent.PersonalizeResponseUseCase
 import com.portfolio.ai_challenge.agent.psy_agent.ProfileExtractor
@@ -58,7 +67,19 @@ val serverModule = module {
     single { UpdatePreferencesUseCase(get()) }
     single { DetectCrisisUseCase() }
     single { SessionStateToIntentMapper() }
+    single {
+        InvariantChecker(
+            listOf(NoDiagnosisInvariant(), NoMedicationInvariant(), NoProfanityInvariant(), ResponseLengthInvariant(), NoPromptLeakInvariant())
+        )
+    }
+    single {
+        InvariantPromptInjector(
+            listOf(NoDiagnosisInvariant(), NoMedicationInvariant(), NoProfanityInvariant(), ResponseLengthInvariant(), NoPromptLeakInvariant())
+        )
+    }
+    single { ValidateAndRetryUseCase(get(), get(), get()) }
     single { PsyAgent(get(), get(), get(), get()) }
     single { Day12PsyAgent(get(), get(), get(), get()) }
     single { Day13PsyAgent(get(), get(), get(), get(), get(), get()) }
+    single { Day14PsyAgent(get(), get(), get(), get(), get(), get(), get()) }
 }

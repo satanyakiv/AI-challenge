@@ -22,6 +22,7 @@ data class PsyChatResponse(
     val profileUpdates: List<String> = emptyList(),
     val intent: String = "",
     val transitions: List<TransitionDebug> = emptyList(),
+    val violations: List<String> = emptyList(),
 )
 
 @Serializable
@@ -46,6 +47,7 @@ class PsyResponseMapper {
         profileUpdates = result.profileUpdates,
         intent = result.intent.apiName,
         transitions = result.transitions.map { TransitionDebug(it.from, it.to, it.event) },
+        violations = result.violations,
     )
 
     fun toTransitionDebug(t: StateTransition): TransitionDebug =
