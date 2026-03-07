@@ -10,7 +10,7 @@ group = "com.portfolio.ai_challenge"
 version = "1.0.0"
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 application {
     mainClass.set("com.portfolio.ai_challenge.ApplicationKt")

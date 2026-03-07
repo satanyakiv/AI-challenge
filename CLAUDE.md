@@ -8,7 +8,7 @@ Package: `com.portfolio.ai_challenge`
 ## Build & Run
 
 ```bash
-./gradlew :composeApp:run          # Desktop app
+./gradlew :composeApp:hotRunJvm --mainClass=com.portfolio.ai_challenge.MainKt  # Desktop (Hot Reload)
 ./gradlew :composeApp:assembleDebug # Android APK
 ./gradlew :server:run              # Ktor server (port 8080)
 ./gradlew :server:test --tests "*.ClassName"  # Server tests (ALWAYS with --tests filter)
@@ -69,6 +69,7 @@ Read `documentation/day-11-to-15/` diagrams before any psy-agent work.
 ## Workflow
 
 - Kill port 8080 before server restart
+- **Desktop app: ALWAYS run via Hot Reload** — `./gradlew :composeApp:hotRunJvm --mainClass=com.portfolio.ai_challenge.MainKt`. Never use plain `:composeApp:run`
 - Do NOT restart server/desktop app after every change. Only restart for user testing if the task took 10+ minutes of active work
 - **MANDATORY: When exiting Plan Mode**, IMMEDIATELY save the plan to `.claude/plans/YYYY-MM-DD-<topic>.md` BEFORE writing any code. This is the FIRST action after plan mode exit — no exceptions.
 - After adding/changing public server API (agents, routes, use cases, interfaces): run `./gradlew :server:dokkaGeneratePublicationHtml`

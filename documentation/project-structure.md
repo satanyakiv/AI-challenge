@@ -1,10 +1,10 @@
 # Project File Structure
 
-> AI Challenge With Love — Kotlin Multiplatform project
+> AI Challenge — Kotlin Multiplatform project
 > Last updated: 2026-03-05
 
 ```
-AIchallangewithlove/
+AIchallenge/
 ├── CLAUDE.md                          # Claude Code project instructions
 ├── README.md
 ├── build.gradle.kts                   # Root build file

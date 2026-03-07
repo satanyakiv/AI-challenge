@@ -1,8 +1,9 @@
-rootProject.name = "AIchallangewithlove"
+rootProject.name = "AIchallenge"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
+        @Suppress("UnstableApiUsage")
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
@@ -15,6 +16,7 @@ pluginManagement {
     }
 }
 
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositories {
         google {

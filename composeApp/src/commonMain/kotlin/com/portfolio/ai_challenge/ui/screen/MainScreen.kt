@@ -110,7 +110,7 @@ fun MainScreen(onDayClick: (Int) -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("AI Challenge with Love") },
+                title = { Text("AI Challenge") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
