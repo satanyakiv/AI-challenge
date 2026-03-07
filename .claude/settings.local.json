@@ -11,7 +11,7 @@
       "Skill(statusline)",
       "Bash(head:*)",
       "Bash(curl:*)",
-      "Bash(lsof -ti:8080 | xargs kill -9 2>/dev/null; sleep 1 && ./gradlew :server:run 2>&1)",
+
       "Bash(gh repo:*)",
       "Bash(python3:*)",
       "Bash(echo Port 8080 cleared:*)",
@@ -26,5 +26,6 @@
   },
   "enabledPlugins": {
     "kotlin-agents@kotlin-agents-marketplace": true
-  }
+  },
+  "outputStyle": "Explanatory"
 }
