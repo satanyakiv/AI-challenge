@@ -3,6 +3,8 @@ package com.portfolio.ai_challenge.di
 import com.portfolio.ai_challenge.agent.Day10BranchingAgent
 import com.portfolio.ai_challenge.agent.Day10FactsAgent
 import com.portfolio.ai_challenge.agent.Day10SlidingAgent
+import ai.koog.prompt.executor.clients.deepseek.DeepSeekLLMClient
+import ai.koog.prompt.executor.llms.SingleLLMPromptExecutor
 import com.portfolio.ai_challenge.agent.Day6Agent
 import com.portfolio.ai_challenge.agent.Day7Agent
 import com.portfolio.ai_challenge.agent.Day9Agent
@@ -10,7 +12,9 @@ import com.portfolio.ai_challenge.agent.psy_agent.Day12PsyAgent
 import com.portfolio.ai_challenge.agent.psy_agent.Day13PsyAgent
 import com.portfolio.ai_challenge.agent.psy_agent.Day14PsyAgent
 import com.portfolio.ai_challenge.agent.psy_agent.Day15PsyAgent
+import com.portfolio.ai_challenge.agent.psy_agent.Day15ResultAssembler
 import com.portfolio.ai_challenge.agent.psy_agent.EnforceTaskPhaseUseCase
+import com.portfolio.ai_challenge.agent.psy_agent.SyncTaskPhaseUseCase
 import com.portfolio.ai_challenge.agent.psy_agent.DetectCrisisUseCase
 import com.portfolio.ai_challenge.agent.psy_agent.ValidateAndRetryUseCase
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantChecker
@@ -51,7 +55,10 @@ val serverModule = module {
     single { LlmClient(get(), get()) }
 
     // Legacy agents (Day 6–10)
-    single { Day6Agent(get()) }
+    single {
+        val client = DeepSeekLLMClient(get<String>())
+        Day6Agent(client, SingleLLMPromptExecutor(client))
+    }
     single { Day7Agent(get()) }
     single { Day9Agent(get()) }
     single { Day10SlidingAgent(get()) }
@@ -85,5 +92,7 @@ val serverModule = module {
     single { Day13PsyAgent(get(), get(), get(), get(), get(), get()) }
     single { Day14PsyAgent(get(), get(), get(), get(), get(), get(), get()) }
     single { EnforceTaskPhaseUseCase() }
-    single { Day15PsyAgent(get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { SyncTaskPhaseUseCase() }
+    single { Day15ResultAssembler(get(), get()) }
+    single { Day15PsyAgent(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
 }

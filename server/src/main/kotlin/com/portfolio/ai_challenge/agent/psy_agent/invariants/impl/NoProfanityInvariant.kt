@@ -1,5 +1,6 @@
 package com.portfolio.ai_challenge.agent.psy_agent.invariants.impl
 
+import com.portfolio.ai_challenge.agent.Prompts
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Invariant
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantResult
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Severity
@@ -17,5 +18,5 @@ class NoProfanityInvariant : Invariant {
         return InvariantResult.Violated(name, "Profanity detected", Severity.SOFT_FIX)
     }
 
-    override fun toPromptInstruction() = "Always use professional, respectful language."
+    override fun toPromptInstruction() = Prompts.Psy.Constraints.NO_PROFANITY
 }

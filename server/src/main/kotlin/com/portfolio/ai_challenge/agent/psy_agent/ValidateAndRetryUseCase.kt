@@ -1,5 +1,6 @@
 package com.portfolio.ai_challenge.agent.psy_agent
 
+import com.portfolio.ai_challenge.agent.Prompts
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantChecker
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantPromptInjector
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Severity
@@ -57,9 +58,6 @@ class ValidateAndRetryUseCase(
 
     companion object {
         const val MAX_RETRIES = 3
-        const val FALLBACK_RESPONSE =
-            "I want to make sure I'm being as helpful as possible. " +
-            "Could you share more about what you're experiencing? " +
-            "I'm here to support you."
+        val FALLBACK_RESPONSE by lazy { Prompts.Psy.FALLBACK }
     }
 }

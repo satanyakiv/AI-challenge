@@ -4,8 +4,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class MessageRole {
-    @SerialName("system") SYSTEM,
-    @SerialName("user") USER,
-    @SerialName("assistant") ASSISTANT,
+enum class MessageRole(val displayName: String) {
+    @SerialName("system") SYSTEM("system"),
+    @SerialName("user") USER("user"),
+    @SerialName("assistant") ASSISTANT("assistant"),
 }

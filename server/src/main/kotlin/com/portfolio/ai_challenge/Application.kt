@@ -24,7 +24,9 @@ import com.portfolio.ai_challenge.routes.day12PsyAgentRoutes
 import com.portfolio.ai_challenge.routes.day13PsyAgentRoutes
 import com.portfolio.ai_challenge.routes.day14PsyAgentRoutes
 import com.portfolio.ai_challenge.routes.day15PsyAgentRoutes
+import com.portfolio.ai_challenge.routes.modelAnalyzeRoutes
 import com.portfolio.ai_challenge.routes.modelRoutes
+import com.portfolio.ai_challenge.routes.temperatureAnalyzeRoutes
 import com.portfolio.ai_challenge.routes.temperatureRoutes
 import io.ktor.client.HttpClient
 import io.ktor.http.*
@@ -58,7 +60,9 @@ fun Application.module() {
     routing {
         get("/") { call.respondText("Ktor: ${Greeting().greet()}") }
         temperatureRoutes(koin.get<HttpClient>(), koin.get<String>())
+        temperatureAnalyzeRoutes(koin.get<HttpClient>(), koin.get<String>())
         modelRoutes(koin.get<HttpClient>(), koin.get<String>())
+        modelAnalyzeRoutes(koin.get<HttpClient>(), koin.get<String>())
         day6AgentRoutes(koin.get<Day6Agent>())
         agentV7Routes(koin.get<Day7Agent>())
         agentV9Routes(koin.get<Day9Agent>())

@@ -1,5 +1,6 @@
 package com.portfolio.ai_challenge.agent.psy_agent.invariants.impl
 
+import com.portfolio.ai_challenge.agent.Prompts
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Invariant
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantResult
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Severity
@@ -18,5 +19,5 @@ class ResponseLengthInvariant(
         return InvariantResult.Passed
     }
 
-    override fun toPromptInstruction() = "Keep responses between 2-3 paragraphs."
+    override fun toPromptInstruction() = Prompts.Psy.Constraints.RESPONSE_LENGTH
 }

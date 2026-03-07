@@ -115,49 +115,4 @@ fun Route.temperatureRoutes(httpClient: HttpClient, apiKey: String) {
         }
     }
 
-    post("/api/temperature/analyze") {
-        val request = call.receive<AnalyzeRequest>()
-        val resultsText = request.results.joinToString("\n\n") { result ->
-            "=== Temperature ${result.temperature} ===\n${result.content}"
-        }
-        val analyzePrompt = """
-            |You are an AI assistant analyzing the effect of the temperature parameter on LLM outputs.
-            |Below are 3 responses to the same prompt, generated with different temperature values.
-            |
-            |$resultsText
-            |
-            |Tasks:
-            |1. Compare these 3 responses by: accuracy, creativity, and diversity. Write a brief comparison (3-5 sentences).
-            |2. For each temperature (0, 0.7, 1.2), write 1-2 sentences about which software development tasks it's best suited for.
-            |
-            |Respond in this exact JSON format (no markdown, no code blocks):
-            |{"comparison":"...","recommendations":[{"temperature":0.0,"bestFor":"..."},{"temperature":0.7,"bestFor":"..."},{"temperature":1.2,"bestFor":"..."}]}
-        """.trimMargin()
-
-        try {
-            val response = httpClient.post(DEEPSEEK_API_URL) {
-                contentType(ContentType.Application.Json)
-                bearerAuth(apiKey)
-                setBody(json.encodeToString(DeepSeekRequest.serializer(),
-                    DeepSeekRequest(
-                        messages = listOf(DeepSeekMessage(role = MessageRole.USER, content = analyzePrompt)),
-                        temperature = 0.0,
-                    )
-                ))
-            }
-            val rawBody = response.bodyAsText()
-            val deepSeekResponse = json.decodeFromString<DeepSeekResponse>(rawBody)
-            val rawContent = deepSeekResponse.choices.firstOrNull()?.message?.content ?: ""
-            val analyzeResponse = json.decodeFromString<AnalyzeResponse>(rawContent)
-            call.respond(analyzeResponse)
-        } catch (e: Exception) {
-            call.respond(
-                HttpStatusCode.InternalServerError,
-                AnalyzeResponse(
-                    comparison = "Analysis failed: ${e.message}",
-                    recommendations = emptyList(),
-                ),
-            )
-        }
-    }
 }

@@ -30,7 +30,7 @@ class ContextWindowManager {
         val truncated = mutableListOf<String>()
         val messages = context.currentMessages.reversed()
         for (msg in messages) {
-            val line = "${msg.role.name}: ${msg.content}"
+            val line = "${msg.role.displayName}: ${msg.content}"
             val lineTokens = estimateTokens(line)
             if (usedTokens + lineTokens > maxTokens) break
             truncated.add(line)

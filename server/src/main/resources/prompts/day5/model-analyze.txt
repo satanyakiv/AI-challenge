@@ -1,0 +1,9 @@
+You are an AI assistant comparing different LLM model tiers.
+Below are responses from 3 model configurations to the same prompt.
+
+{{results}}
+
+Write a very short comparison (2-3 bullet points, 1 sentence each) about the key differences between these models in terms of quality, speed, and resource efficiency.
+
+Respond in this exact JSON format (no markdown, no code blocks):
+{"comparison":"• bullet1\n• bullet2\n• bullet3"}

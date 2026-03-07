@@ -62,7 +62,7 @@ class Day9Agent(private val llmClient: LlmClient) {
             } else {
                 appendLine("Conversation to summarize:")
             }
-            oldMessages.forEach { msg -> appendLine("${msg.role.name}: ${msg.content}") }
+            oldMessages.forEach { msg -> appendLine("${msg.role.displayName}: ${msg.content}") }
         }
 
         val summaryMessages = listOf(

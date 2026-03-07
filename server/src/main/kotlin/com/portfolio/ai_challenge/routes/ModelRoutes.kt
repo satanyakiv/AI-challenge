@@ -9,10 +9,8 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.*
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -147,44 +145,4 @@ fun Route.modelRoutes(httpClient: HttpClient, apiKey: String) {
         }
     }
 
-    post("/api/models/analyze") {
-        val request = call.receive<ModelCompareAnalyzeRequest>()
-        val resultsText = request.results.joinToString("\n\n") { r ->
-            "=== ${r.modelLabel} ===\nResponse time: ${r.responseTimeMs}ms\nTokens: ${r.totalTokens}\nCost: $${String.format("%.6f", r.estimatedCost)}\nContent: ${r.content}"
-        }
-        val analyzePrompt = """
-            |You are an AI assistant comparing different LLM model tiers.
-            |Below are responses from 3 model configurations to the same prompt.
-            |
-            |$resultsText
-            |
-            |Write a very short comparison (2-3 bullet points, 1 sentence each) about the key differences between these models in terms of quality, speed, and resource efficiency.
-            |
-            |Respond in this exact JSON format (no markdown, no code blocks):
-            |{"comparison":"• bullet1\n• bullet2\n• bullet3"}
-        """.trimMargin()
-
-        try {
-            val response = httpClient.post(DEEPSEEK_API_URL) {
-                contentType(ContentType.Application.Json)
-                bearerAuth(apiKey)
-                setBody(json.encodeToString(DeepSeekRequest.serializer(),
-                    DeepSeekRequest(
-                        messages = listOf(DeepSeekMessage(role = MessageRole.USER, content = analyzePrompt)),
-                        temperature = 0.0,
-                    )
-                ))
-            }
-            val rawBody = response.bodyAsText()
-            val deepSeekResponse = json.decodeFromString<DeepSeekResponse>(rawBody)
-            val rawContent = deepSeekResponse.choices.firstOrNull()?.message?.content ?: ""
-            val analysis = json.decodeFromString<ModelCompareAnalysis>(rawContent)
-            call.respond(analysis)
-        } catch (e: Exception) {
-            call.respond(
-                HttpStatusCode.InternalServerError,
-                ModelCompareAnalysis(comparison = "Analysis failed: ${e.message}"),
-            )
-        }
-    }
 }

@@ -64,7 +64,7 @@ class Day10FactsAgent(private val llmClient: LlmClient) {
             "Existing facts: " + existingFacts.entries.joinToString(", ") { "\"${it.key}\": \"${it.value}\"" }
         } else "No existing facts yet."
 
-        val recentExchange = messages.takeLast(2).joinToString("\n") { "${it.role.name}: ${it.content}" }
+        val recentExchange = messages.takeLast(2).joinToString("\n") { "${it.role.displayName}: ${it.content}" }
 
         val extractionMessages = listOf(
             DeepSeekMessage(role = MessageRole.SYSTEM, content = Prompts.Day10.FACTS_EXTRACTION),

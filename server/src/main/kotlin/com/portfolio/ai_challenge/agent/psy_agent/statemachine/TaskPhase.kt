@@ -2,25 +2,31 @@ package com.portfolio.ai_challenge.agent.psy_agent.statemachine
 
 sealed interface TaskPhase {
     val displayName: String
+    val order: Int
 
     data object Assessment : TaskPhase {
         override val displayName = "assessment"
+        override val order = 0
     }
 
     data class PlanProposed(val plan: String = "") : TaskPhase {
         override val displayName = "plan_proposed"
+        override val order = 1
     }
 
     data class Executing(val plan: String = "") : TaskPhase {
         override val displayName = "executing"
+        override val order = 2
     }
 
     data object Validating : TaskPhase {
         override val displayName = "validating"
+        override val order = 3
     }
 
     data object Completed : TaskPhase {
         override val displayName = "completed"
+        override val order = 4
     }
 
     companion object {

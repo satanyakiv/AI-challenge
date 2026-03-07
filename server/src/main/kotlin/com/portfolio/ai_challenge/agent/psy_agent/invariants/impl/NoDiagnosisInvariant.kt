@@ -1,5 +1,6 @@
 package com.portfolio.ai_challenge.agent.psy_agent.invariants.impl
 
+import com.portfolio.ai_challenge.agent.Prompts
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Invariant
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantResult
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Severity
@@ -22,7 +23,5 @@ class NoDiagnosisInvariant : Invariant {
         return InvariantResult.Violated(name, "Diagnosis detected: ${matched.pattern}", Severity.HARD_BLOCK)
     }
 
-    override fun toPromptInstruction() =
-        "NEVER diagnose the client. Do not say 'you have X' or 'this sounds like X disorder'. " +
-        "Instead say 'what you are describing sounds challenging' or 'a licensed therapist could explore this further'."
+    override fun toPromptInstruction() = Prompts.Psy.Constraints.NO_DIAGNOSIS
 }

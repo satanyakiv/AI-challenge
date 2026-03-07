@@ -1,5 +1,6 @@
 package com.portfolio.ai_challenge.agent.psy_agent.invariants.impl
 
+import com.portfolio.ai_challenge.agent.Prompts
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Invariant
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.InvariantResult
 import com.portfolio.ai_challenge.agent.psy_agent.invariants.Severity
@@ -20,6 +21,5 @@ class NoMedicationInvariant : Invariant {
         return InvariantResult.Violated(name, "Medication recommendation detected", Severity.HARD_BLOCK)
     }
 
-    override fun toPromptInstruction() =
-        "NEVER recommend specific medications. Say 'a psychiatrist could discuss medication options with you'."
+    override fun toPromptInstruction() = Prompts.Psy.Constraints.NO_MEDICATION
 }
