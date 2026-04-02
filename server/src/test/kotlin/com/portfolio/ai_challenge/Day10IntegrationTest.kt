@@ -13,6 +13,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import kotlinx.coroutines.runBlocking
 import org.junit.Assume
+import org.junit.Ignore
 import org.junit.BeforeClass
 import org.junit.Test
 
@@ -25,6 +26,7 @@ import org.junit.Test
  *
  * After running, copy the printed metrics into Day10ComparisonData.kt.
  */
+@Ignore("Integration test — calls real DeepSeek API, run manually only")
 class Day10IntegrationTest {
 
     companion object {

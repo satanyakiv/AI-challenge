@@ -26,11 +26,13 @@ import io.mockk.mockk
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import org.junit.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@Ignore("Integration test — calls real DeepSeek API, run manually only")
 class Day13IntegrationTest {
 
     private fun fakeChatResult(
