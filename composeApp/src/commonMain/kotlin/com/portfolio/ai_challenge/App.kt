@@ -21,6 +21,7 @@ import com.portfolio.ai_challenge.navigation.RouteDay12
 import com.portfolio.ai_challenge.navigation.RouteDay13
 import com.portfolio.ai_challenge.navigation.RouteDay14
 import com.portfolio.ai_challenge.navigation.RouteDay15
+import com.portfolio.ai_challenge.navigation.RouteFreud
 import com.portfolio.ai_challenge.navigation.RouteDay4
 import com.portfolio.ai_challenge.navigation.RouteDay5
 import com.portfolio.ai_challenge.navigation.RouteDay6
@@ -38,6 +39,7 @@ import com.portfolio.ai_challenge.ui.screen.Day12Screen
 import com.portfolio.ai_challenge.ui.screen.Day13Screen
 import com.portfolio.ai_challenge.ui.screen.Day14Screen
 import com.portfolio.ai_challenge.ui.screen.Day15Screen
+import com.portfolio.ai_challenge.ui.screen.FreudScreen
 import com.portfolio.ai_challenge.ui.screen.Day4Screen
 import com.portfolio.ai_challenge.ui.screen.Day5Screen
 import com.portfolio.ai_challenge.ui.screen.Day6Screen
@@ -63,7 +65,10 @@ fun App() {
                 ),
                 entryProvider = entryProvider {
                     entry<RouteMain> {
-                        MainScreen(onDayClick = { id -> navigator.navigateToDay(id) })
+                        MainScreen(
+                            onDayClick = { id -> navigator.navigateToDay(id) },
+                            onFreudClick = { navigator.navigateTo(RouteFreud) },
+                        )
                     }
                     entry<RouteDay4>  { Day4Screen(onBack = { navigator.goBack() }) }
                     entry<RouteDay5>  { Day5Screen(onBack = { navigator.goBack() }) }
@@ -89,6 +94,7 @@ fun App() {
                     entry<RouteDay13>           { Day13Screen(onBack = { navigator.goBack() }) }
                     entry<RouteDay14>           { Day14Screen(onBack = { navigator.goBack() }) }
                     entry<RouteDay15>           { Day15Screen(onBack = { navigator.goBack() }) }
+                    entry<RouteFreud>           { FreudScreen(onBack = { navigator.goBack() }) }
                 },
             )
         }

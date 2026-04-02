@@ -17,6 +17,7 @@ data object RouteDay12
 data object RouteDay13
 data object RouteDay14
 data object RouteDay15
+data object RouteFreud
 
 private val dayRoutes: Map<Int, Any> = mapOf(
     4 to RouteDay4,
