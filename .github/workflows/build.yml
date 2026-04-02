@@ -30,8 +30,8 @@ jobs:
       - name: Compile server
         run: ./gradlew :server:compileKotlin
 
-      - name: Compile shared
-        run: ./gradlew :shared:compileKotlin
+      - name: Compile shared (JVM)
+        run: ./gradlew :shared:compileKotlinJvm
 
       - name: Compile composeApp (JVM)
         run: ./gradlew :composeApp:compileKotlinJvm
