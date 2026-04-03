@@ -19,15 +19,15 @@ fun formatAiResponse(raw: String): String {
     text = text.replace("\\)", "")
 
     // \frac{a}{b} → a/b
-    val fracRegex = Regex("""\\frac\{([^}]*)}\{([^}]*)}""")
+    val fracRegex = Regex("""\\frac\{([^}]*)\}\{([^}]*)\}""")
     text = fracRegex.replace(text) { "${it.groupValues[1]}/${it.groupValues[2]}" }
 
     // \text{...} → content
-    val textRegex = Regex("""\\text\{([^}]*)}""")
+    val textRegex = Regex("""\\text\{([^}]*)\}""")
     text = textRegex.replace(text) { it.groupValues[1] }
 
     // \sqrt{...} → √(content)
-    val sqrtRegex = Regex("""\\sqrt\{([^}]*)}""")
+    val sqrtRegex = Regex("""\\sqrt\{([^}]*)\}""")
     text = sqrtRegex.replace(text) { "√(${it.groupValues[1]})" }
 
     // Common LaTeX symbols
@@ -47,11 +47,11 @@ fun formatAiResponse(raw: String): String {
     text = text.replace("\\ ", " ")
 
     // V_{subscript} → V_subscript (clean braces around subscripts)
-    val subRegex = Regex("""_\{([^}]*)}""")
+    val subRegex = Regex("""_\{([^}]*)\}""")
     text = subRegex.replace(text) { "_${it.groupValues[1]}" }
 
     // ^{superscript} → ^superscript
-    val supRegex = Regex("""\^\{([^}]*)}""")
+    val supRegex = Regex("""\^\{([^}]*)\}""")
     text = supRegex.replace(text) { "^${it.groupValues[1]}" }
 
     // Markdown: ## Header → Header
